@@ -13,6 +13,7 @@ module.exports = {
             .select('_id title country city price unit imageId')
             .limit(5)
             .populate({ path: 'imageId', select:'_id imageUrl'})
+
             const category = await Category.find()
             .select('_id name')
             .limit(3)
@@ -27,6 +28,7 @@ module.exports = {
                     perDocumentLimit: 1
                 }
             })
+
             const treveler = await Treveler.find();
             const treasure = await Treasure.find();
             const city = await Item.find();
@@ -65,6 +67,7 @@ module.exports = {
              });
         } catch (error) {
             console.log(error);
+            res.status(500).json({ message: "Internal server error"});
         }
     },
 
@@ -93,6 +96,7 @@ module.exports = {
                 bank,
                 testimonial
             })
+
         } catch (error) {
             res.status(500).json({ message: "Internal Server Error"});
         }
@@ -112,9 +116,12 @@ module.exports = {
             accountHolder,
             bankFrom,
         } = req.body;
+
         if (!req.file) {
             return res.status(404).json({ message: "Image Not Found"});
         }
+
+
 
         if (
             idItem === undefined ||
@@ -138,6 +145,7 @@ module.exports = {
             }
 
             item.sumBooking +=1;
+
             await item.save();
 
             let total = item.price * duration;
